@@ -44,6 +44,11 @@
     	<artifactId>hibernate-core</artifactId>
     	<version>3.6.10.Final</version>
     </dependency>
+    <dependency>
+    	<groupId>opensymphony</groupId>
+    	<artifactId>sitemesh</artifactId>
+    	<version>2.4.2</version>
+    </dependency>
   </dependencies>
   <build>
     <finalName>webskeleton</finalName>
