@@ -8,6 +8,10 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public class BaseDomain implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Column
 	private String createby;
 	@Column

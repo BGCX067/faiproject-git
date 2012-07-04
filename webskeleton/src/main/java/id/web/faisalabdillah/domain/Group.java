@@ -12,6 +12,11 @@ import javax.persistence.OneToMany;
 @Entity(name="MST_GROUP")
 public class Group extends BaseDomain{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	private String code;
 	

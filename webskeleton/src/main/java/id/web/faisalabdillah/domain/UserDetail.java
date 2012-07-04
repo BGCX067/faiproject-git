@@ -6,6 +6,10 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class UserDetail extends BaseDomain {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Column
 	private String name;
 	@Column

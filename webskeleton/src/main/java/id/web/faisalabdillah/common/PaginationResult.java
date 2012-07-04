@@ -1,13 +1,10 @@
 package id.web.faisalabdillah.common;
 
 import id.web.faisalabdillah.domain.User;
-import id.web.faisalabdillah.domain.UserDetail;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-public class PaginationResult<T> {
+public class PaginationResult<T extends Object> {
 	private List<T> result;
 	private int resultSize;
 	private int pageSize;
@@ -17,6 +14,7 @@ public class PaginationResult<T> {
 		this.resultSize = resultSize;
 		this.startIndex =startIndex;
 		this.pageSize = pageSize;
+		serializeIndex();
 	}
 	
 	public List<T> getResult() {
@@ -44,20 +42,42 @@ public class PaginationResult<T> {
 	public void setStartIndex(int startIndex) {
 		this.startIndex = startIndex;
 	}
-	public int getNextIndex() {
+	public int getNextPageIndex() {
 		int maxIndex=resultSize/pageSize;
 		if(resultSize % pageSize !=0){
 			maxIndex+=1;
 		}
 		return startIndex>=maxIndex?startIndex:startIndex+pageSize;
 	}
-	public int getPrevIndex() {
+	public int getPrevPageIndex() {
 		return startIndex<1?startIndex:startIndex-pageSize;
 	}
+	
+	public void serializeIndex(){
+		int sisa=startIndex%pageSize;
+		if(sisa!=0){
+			startIndex -=sisa;
+		}
+	}
+	public static int serializeIndex(int index,int pageSize){
+		int sisa=index%pageSize;
+		if(sisa!=0){
+			index -=sisa;
+		}
+		return index;
+	}
+	
 	public static void main(String[] args) {
-		PaginationResult<User> userPaginated=new PaginationResult<User>(new ArrayList<User>(), 5, 2, 3);
-		System.out.println(userPaginated.getClass().getName());
-		System.out.println(userPaginated.getClass().getCanonicalName());
+		PaginationResult<User> userPaginated=new PaginationResult<User>(new ArrayList<User>(), 53, 7, 5);
+//		System.out.println(userPaginated.getClass().getName());
+//		System.out.println(userPaginated.getClass().getCanonicalName());
+//		System.out.println(userPaginated.getNextPageIndex());
+//		System.out.println(userPaginated.getPrevPageIndex());
+		userPaginated.serializeIndex();
+		System.out.println(userPaginated.getStartIndex());
+		int jump=5;
+		int startIndex=4;
+		System.out.println(startIndex % jump);
 	}
 
 }

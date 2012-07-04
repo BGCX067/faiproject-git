@@ -7,6 +7,10 @@ import javax.persistence.Id;
 @Entity(name="MST_ROLE")
 public class Role extends BaseDomain {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	private String code;
 	@Column
