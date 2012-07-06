@@ -9,4 +9,5 @@ public interface BaseService<T> {
 	public boolean update(T entity);
 	public T findById(Object id);
 	public List<T> findAll();
+	public List<T> findByExample(T entity);
 }
