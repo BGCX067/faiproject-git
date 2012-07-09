@@ -38,5 +38,10 @@ public class UserDaoImpl extends AbstractDao<User> implements IUserDao{
 		List<User> list=getHibernateTemplate().findByCriteria(c, firstIndex, maxResult);
 		return new PaginationResult<User>(list,1,firstIndex,maxResult);
 	}
+	@Override
+	public PaginationResult<User> findUserByName(String name, int firstResult,
+			int maxResult) {
+		return searchByHqlPagedResult("select u from User u where u.name like %"+name+"%", firstResult, maxResult);
+	}
 
 }

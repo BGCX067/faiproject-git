@@ -3,10 +3,12 @@ package id.web.faisalabdillah.dao;
 import id.web.faisalabdillah.common.PaginationResult;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
@@ -62,27 +64,50 @@ public abstract class AbstractDao<T> {
 		return sessionFactory.getCurrentSession().createQuery("select c from "+clazz.getName()+" c").list();
 	}
 	
-	public PaginationResult<T> findAllPaginated(int startIndex,int maxResult){
-		String query="select c from "+clazz.getName()+" c";
-		return searchPaginationHQL(query, startIndex, maxResult);
+	protected List<T> searchByHql(String hql,int firstResult,int maxResult){
+		Query q=sessionFactory.getCurrentSession().createQuery(hql);
+		q.setFirstResult(firstResult);
+		
+		if(maxResult>0)q.setMaxResults(maxResult);
+		return q.list();
 	}
 	
-	public PaginationResult<T> searchPaginationHQL(String query,int startIndex,int maxResult){
+	protected List<T> searchByQuery(String hql) {
+		return searchByHql(hql, 0, 0);
+	}
+	
+	
+	protected PaginationResult<T> searchByHqlPagedResult(String hql,int firstResult,int maxResult){
+		return new PaginationResult<T>(searchByHql(hql, firstResult, maxResult), getResultSize(hql), firstResult, maxResult);
+	}
+	
+	protected List<T> searchByCriteria(Criteria criteria){
+		return searchByCriteria(criteria,0,0);
+	}
+	protected List<T> searchByCriteria(Criteria criteria,int firstResult,int maxResult){
+		criteria.setFirstResult(firstResult);
+		if(maxResult>0)criteria.setMaxResults(maxResult);
+		return criteria.list();
+	}
+	
+	protected PaginationResult<T> searchByCriteriaPagedResult(Criteria criteria,int firstResult,int maxResult){
+		return new PaginationResult( searchByCriteria(criteria, firstResult, maxResult), getResultSize(criteria), firstResult, maxResult);
+	}
+	
+	
+	protected int getResultSize(String hql){
 		StringBuffer sb=new StringBuffer();
 		sb.append("select count(1) from ");
 		sb.append(" ( ");
-		sb.append(query);
+		sb.append(hql);
 		sb.append(" ) ");
-		int resultSize=((Integer) sessionFactory.getCurrentSession().createQuery(sb.toString()).uniqueResult()).intValue();
-		List<T> list=sessionFactory.getCurrentSession().createQuery(query).setFirstResult(startIndex).setMaxResults(maxResult).list();
-		return new PaginationResult<T>(list, resultSize, startIndex, maxResult);
+		return ((Integer) sessionFactory.getCurrentSession().createQuery(hql).uniqueResult()).intValue();
 	}
-	
-	public int getResultSize(Criteria crit){
+	protected int getResultSize(Criteria crit){
 		return ((Long) crit.setProjection(Projections.rowCount()).uniqueResult()).intValue();
 	}
 	
-	public int getResultSize(DetachedCriteria c){
+	protected int getResultSize(DetachedCriteria c){
 		c.setProjection(Projections.rowCount());
 		return (Integer) getHibernateTemplate().findByCriteria(c).get(0);
 	}

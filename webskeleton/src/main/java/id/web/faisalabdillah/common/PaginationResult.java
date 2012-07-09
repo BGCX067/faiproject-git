@@ -4,7 +4,7 @@ import id.web.faisalabdillah.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaginationResult<T extends Object> {
+public class PaginationResult<T> {
 	private List<T> result;
 	private int resultSize;
 	private int pageSize;
