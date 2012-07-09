@@ -28,6 +28,7 @@ public abstract class AbstractDao<T> {
 		return hibernateTemplate;
 	}
 
+	@SuppressWarnings("unused")
 	@Autowired
 	private void setHibernateTemplate(SessionFactory sessionFactory) {
 		this.hibernateTemplate = new HibernateTemplate(sessionFactory);
@@ -60,10 +61,12 @@ public abstract class AbstractDao<T> {
 		return (T) sessionFactory.getCurrentSession().load(clazz.getClass(), (Serializable) id);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<T> findAll(){
 		return sessionFactory.getCurrentSession().createQuery("select c from "+clazz.getName()+" c").list();
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected List<T> searchByHql(String hql,int firstResult,int maxResult){
 		Query q=sessionFactory.getCurrentSession().createQuery(hql);
 		q.setFirstResult(firstResult);
@@ -84,6 +87,7 @@ public abstract class AbstractDao<T> {
 	protected List<T> searchByCriteria(Criteria criteria){
 		return searchByCriteria(criteria,0,0);
 	}
+	@SuppressWarnings("unchecked")
 	protected List<T> searchByCriteria(Criteria criteria,int firstResult,int maxResult){
 		criteria.setFirstResult(firstResult);
 		if(maxResult>0)criteria.setMaxResults(maxResult);
@@ -91,7 +95,7 @@ public abstract class AbstractDao<T> {
 	}
 	
 	protected PaginationResult<T> searchByCriteriaPagedResult(Criteria criteria,int firstResult,int maxResult){
-		return new PaginationResult( searchByCriteria(criteria, firstResult, maxResult), getResultSize(criteria), firstResult, maxResult);
+		return new PaginationResult<T>( searchByCriteria(criteria, firstResult, maxResult), getResultSize(criteria), firstResult, maxResult);
 	}
 	
 	
