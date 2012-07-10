@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-@Entity(name="MST_ACCESS")
+@Entity
 public class Access extends BaseDomain{
 	
 	@Id

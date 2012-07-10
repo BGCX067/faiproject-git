@@ -9,7 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-@Entity(name="MST_GROUP")
+@Entity
 public class Group extends BaseDomain{
 
 	/**

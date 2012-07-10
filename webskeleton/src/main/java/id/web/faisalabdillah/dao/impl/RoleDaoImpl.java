@@ -6,8 +6,6 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.MatchMode;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import id.web.faisalabdillah.common.PaginationResult;
 import id.web.faisalabdillah.dao.AbstractDao;
 import id.web.faisalabdillah.dao.IRoleDao;
@@ -24,6 +22,7 @@ public class RoleDaoImpl extends AbstractDao<Role> implements IRoleDao{
 		this(Role.class);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Role> findRoleByExample(Role role) {
 		Example example=Example.create(role);
@@ -34,7 +33,9 @@ public class RoleDaoImpl extends AbstractDao<Role> implements IRoleDao{
 	@Override
 	public PaginationResult<Role> findRoleByExample(Role role, int firstIndex,
 			int maxResult) {
-		return null;
+		Example example=Example.create(role);
+		example.enableLike(MatchMode.ANYWHERE);
+		return searchByExample(example);
 	}
 
 }

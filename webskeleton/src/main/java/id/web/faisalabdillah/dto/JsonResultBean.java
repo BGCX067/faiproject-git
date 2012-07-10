@@ -2,7 +2,7 @@ package id.web.faisalabdillah.dto;
 
 public class JsonResultBean<T> {
 	private int resultsize;
-	private boolean success;
+	private boolean success=false;
 	private T result;
 	private String message;
 	private String errorcode;

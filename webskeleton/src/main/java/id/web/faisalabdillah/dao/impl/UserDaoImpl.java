@@ -2,9 +2,11 @@ package id.web.faisalabdillah.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import id.web.faisalabdillah.common.PaginationResult;
@@ -23,6 +25,7 @@ public class UserDaoImpl extends AbstractDao<User> implements IUserDao{
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	public List<User> findUserByExample(User user) {
 		Example example=Example.create(user);
 		example.enableLike(MatchMode.ANYWHERE);
@@ -30,6 +33,7 @@ public class UserDaoImpl extends AbstractDao<User> implements IUserDao{
 		return getHibernateTemplate().findByCriteria(DetachedCriteria.forClass(User.class).add(example));
 	}
 
+	@SuppressWarnings("unchecked")
 	public PaginationResult<User> findUserByExample(User user, int firstIndex, int maxResult) {
 		Example example=Example.create(user);
 		example.enableLike(MatchMode.ANYWHERE);
@@ -41,7 +45,14 @@ public class UserDaoImpl extends AbstractDao<User> implements IUserDao{
 	@Override
 	public PaginationResult<User> findUserByName(String name, int firstResult,
 			int maxResult) {
-		return searchByHqlPagedResult("select u from User u where u.name like %"+name+"%", firstResult, maxResult);
+		Criteria crit=getSessionFactory().getCurrentSession().createCriteria(User.class);
+		crit.add(Restrictions.like("name", name, MatchMode.ANYWHERE));
+		return searchByCriteriaPagedResult(crit, firstResult, maxResult);
 	}
+	@Override
+	public PaginationResult<User> findAllPaged(int firstResult, int maxResult) {
+		return searchByCriteriaPagedResult(getSessionFactory().getCurrentSession().createCriteria(User.class), firstResult, maxResult);
+	}
+	
 
 }

@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-@Entity(name="MST_MENU")
+@Entity
 public class Menu extends BaseDomain {
 	
 	@Id

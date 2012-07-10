@@ -9,4 +9,5 @@ public interface IUserDao {
 	public List<User> findUserByExample(User user);
 	public PaginationResult<User> findUserByExample(User user,int firstIndex,int maxResult);
 	public PaginationResult<User> findUserByName(String name,int firstResult,int maxResult);
+	public PaginationResult<User> findAllPaged(int firstResult,int maxResult);
 }

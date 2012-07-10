@@ -10,7 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-@Entity(name="MST_USER")
+@Entity
 public class User extends UserDetail {
 
 	@Id

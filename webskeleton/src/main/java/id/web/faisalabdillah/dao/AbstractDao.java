@@ -3,7 +3,6 @@ package id.web.faisalabdillah.dao;
 import id.web.faisalabdillah.common.PaginationResult;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -11,6 +10,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.HibernateTemplate;
@@ -61,9 +61,17 @@ public abstract class AbstractDao<T> {
 		return (T) sessionFactory.getCurrentSession().load(clazz.getClass(), (Serializable) id);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<T> findAll(){
-		return sessionFactory.getCurrentSession().createQuery("select c from "+clazz.getName()+" c").list();
+		return findAll(0, 0);
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<T> findAll(int firstResult,int maxResult){
+		Query q=sessionFactory.getCurrentSession().createQuery("select c from "+clazz.getName()+" c");
+		q.setFirstResult(firstResult);
+		if(maxResult!=0)q.setMaxResults(maxResult);
+		return q.list();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -75,13 +83,13 @@ public abstract class AbstractDao<T> {
 		return q.list();
 	}
 	
-	protected List<T> searchByQuery(String hql) {
-		return searchByHql(hql, 0, 0);
+	protected List<T> searchByQuery(String sql) {
+		return searchByHql(sql, 0, 0);
 	}
 	
 	
-	protected PaginationResult<T> searchByHqlPagedResult(String hql,int firstResult,int maxResult){
-		return new PaginationResult<T>(searchByHql(hql, firstResult, maxResult), getResultSize(hql), firstResult, maxResult);
+	protected PaginationResult<T> searchBySqlPagedResult(String sql,int firstResult,int maxResult){
+		return new PaginationResult<T>(searchByHql(sql, firstResult, maxResult), getResultSize(sql), firstResult, maxResult);
 	}
 	
 	protected List<T> searchByCriteria(Criteria criteria){
@@ -98,14 +106,22 @@ public abstract class AbstractDao<T> {
 		return new PaginationResult<T>( searchByCriteria(criteria, firstResult, maxResult), getResultSize(criteria), firstResult, maxResult);
 	}
 	
+	@SuppressWarnings("unchecked")
+	protected PaginationResult<T> searchByExample(Example example) {
+		Criteria crit=sessionFactory.getCurrentSession().createCriteria(clazz);
+		crit.add(example);
+		return new PaginationResult<T>(crit.list(), getResultSize(crit), 0, 0);
+		
+	}
 	
-	protected int getResultSize(String hql){
+	protected int getResultSize(String sql){
 		StringBuffer sb=new StringBuffer();
-		sb.append("select count(1) from ");
+		sb.append("select count(*) from ");
 		sb.append(" ( ");
-		sb.append(hql);
-		sb.append(" ) ");
-		return ((Integer) sessionFactory.getCurrentSession().createQuery(hql).uniqueResult()).intValue();
+		sb.append(sql);
+		sb.append(" )");
+		sessionFactory.getCurrentSession().createSQLQuery(sql).uniqueResult();
+		return ((Integer) sessionFactory.getCurrentSession().createSQLQuery(sql).uniqueResult()).intValue();
 	}
 	protected int getResultSize(Criteria crit){
 		return ((Long) crit.setProjection(Projections.rowCount()).uniqueResult()).intValue();

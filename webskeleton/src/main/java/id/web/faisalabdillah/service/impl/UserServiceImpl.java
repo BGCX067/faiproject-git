@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import id.web.faisalabdillah.common.PaginationResult;
 import id.web.faisalabdillah.dao.impl.UserDaoImpl;
 import id.web.faisalabdillah.domain.Group;
 import id.web.faisalabdillah.domain.User;
@@ -77,7 +78,7 @@ public class UserServiceImpl implements IUserService {
 	public User findById(Object id, boolean eager) {
 		User user = userDao.load(id);
 		if (eager) {
-			eagerFetch(user);
+			eagerFetch(user,true);
 		}
 		return user;
 	}
@@ -88,21 +89,39 @@ public class UserServiceImpl implements IUserService {
 		if (eager) {
 			for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
 				User user = (User) iterator.next();
-				eagerFetch(user);
+				eagerFetch(user,true);
 			}
 		}
 		return users;
 	}
-
-	private void eagerFetch(User user) {
+	
+	@Override
+	public PaginationResult<User> findAllPaged(boolean eager,int firstResult,int maxResult){
+		PaginationResult<User> userp=userDao.findAllPaged(firstResult, maxResult);
+		if(eager){
+		List<User> users=userp.getResult();
+		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
+			User user = (User) iterator.next();
+			eagerFetch(user,true);	
+		}
+		}
+		return userp;
+	}
+	@Override
+	public PaginationResult<User> findAllPaged(int firstResult,int maxResult){
+		return findAllPaged(false, firstResult, maxResult);
+	}
+	protected void eagerFetch(User user,boolean all) {
 		Set<Group> groups = user.getGroup();
 		Hibernate.initialize(groups);
+		if(all){
 		if (groups != null) {
 			for (Iterator<Group> iterator2 = groups.iterator(); iterator2
 					.hasNext();) {
 				Group group = (Group) iterator2.next();
 				Hibernate.initialize(group.getRoles());
 			}
+		}
 		}
 	}
 
@@ -111,15 +130,47 @@ public class UserServiceImpl implements IUserService {
 		List<User> users = userDao.findUserByExample(entity);
 		if (eager) {
 			for (User user : users) {
-				eagerFetch(user);
+				eagerFetch(user,true);
 			}
 		}
 		return users;
 	}
 
 	@Override
-	public List<User> findByExample(User entity) {
+	public List<User> searchByExample(User entity) {
 		return findByExample(entity, false);
+	}
+
+	@Override
+	public PaginationResult<User> findUserByName(String name, int firstResult,
+			int maxResult) {
+		return userDao.findUserByName(name, firstResult, maxResult);
+	}
+	@Override
+	public PaginationResult<User> findByExample(User user,int firstResult,int maxResult){
+		return findByExample(user, firstResult, firstResult,false);
+	}
+	
+	@Override
+	public PaginationResult<User> findByExample(User user,int firstResult,int maxResult,boolean eager){
+		PaginationResult<User> userp=userDao.findUserByExample(user, firstResult, firstResult);
+		for (Iterator<User> iterator = userp.getResult().iterator(); iterator.hasNext();) {
+			User u = (User) iterator.next();
+			eagerFetch(u, false);
+			
+		}
+		return userp;
+	}
+
+	@Override
+	public PaginationResult<User> searchByExample(User entity, int firstResult,
+			int maxResult) {
+		return userDao.findUserByExample(entity, firstResult, maxResult);
+	}
+
+	@Override
+	public List<User> findAll(int firstResult, int maxResult) {
+		return userDao.findAll(firstResult,maxResult);
 	}
 
 }

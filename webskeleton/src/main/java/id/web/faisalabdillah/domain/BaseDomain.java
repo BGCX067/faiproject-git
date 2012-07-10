@@ -15,7 +15,7 @@ public class BaseDomain implements Serializable{
 	@Column
 	private String createby;
 	@Column
-	private Date createtm=new Date();
+	private Date createtm;
 	@Column
 	private String lastupdby;
 	@Column
