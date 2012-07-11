@@ -12,14 +12,14 @@ public class BaseDomain implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Column
+	@Column(columnDefinition="")
 	private String createby;
 	@Column
 	private Date createtm;
 	@Column
 	private String lastupdby;
 	@Column
-	private Date lastupdtm = new Date();
+	private Date lastupdtm;
 	@Column
 	private Boolean deleted;
 

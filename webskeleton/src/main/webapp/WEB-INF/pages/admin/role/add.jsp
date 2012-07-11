@@ -35,25 +35,27 @@
 	</form:form>
 	<table class="table table-striped">
 		<thead>
-			<tr><td colspan="3"><form class="well form-search"><input type="text" name="query" class="search-query"/><button type="button" name="search" class="btn">Search</button> </form></td></tr>
+			<tr><td colspan="4"><form method="get" class="well form-search"><input type="text" name="q" class="search-query"/><button type="submit" name="search" class="btn">Search</button> </form></td></tr>
 			<tr><th>No</th><th>Code</th><th>Description</th></tr>
 		</thead>
 		<tbody>
-			<tr><td>1</td><td>Test 1</td><td>Test 1</td></tr>
-			<tr><td>2</td><td>Test 2</td><td>Test 2</td></tr>
-			<tr><td>3</td><td>Test 3</td><td>Test 3</td></tr>
+			<c:forEach items="${roles}" var="role" varStatus="i">
+			<tr><td>${i.count}</td><td>${role.code }</td><td>${role.description}</td><td><div class="btn-group"><a class="btn" href="#">Delete</a><a class="btn" href="#">Edit</a></div></td></tr>
+			</c:forEach>
+			<c:if test="${resultSize == 0 }">
+			<tr><td colspan="4">0 Result</td></tr>
+			</c:if>
 		</tbody>
 		<tfoot>
-			<tr><td colspan="3">
+			<tr><td colspan="4">
 				<div class="pagination">
 					<ul>
-						<li><a href="#${param.q}">prev</a></li>
-						<li><a href="#">1</a></li>
-						<li><a href="#">2</a></li>
-						<li><a href="#">3</a></li>
-						<li><a href="#">next</a></li>
+						<li><a href="<%=request.getContextPath()+"/admin/role/add" %>/${0}/${prevIndex}">prev</a></li>
+						<c:forEach begin="1" end="${numberPage}" var="i">
+						<li><a href="<%=request.getContextPath()+"/admin/role/add" %>/${0}/${i}">${i}</a></li>
+						</c:forEach>
+						<li><a href="<%=request.getContextPath()+"/admin/role/add" %>/${0}/${nextIndex}">next</a></li>
 					</ul>
-					${param.resultSize}
 				</div>
 			</td></tr>
 		</tfoot>

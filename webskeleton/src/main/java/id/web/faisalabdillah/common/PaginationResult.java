@@ -9,6 +9,9 @@ public class PaginationResult<T> {
 	private int resultSize;
 	private int pageSize;
 	private int startIndex;
+	private int pageNumber;
+	
+	
 	public PaginationResult(List<T> result,int resultSize,int startIndex,int pageSize) {
 		this.result=result;
 		this.resultSize = resultSize;
@@ -43,6 +46,9 @@ public class PaginationResult<T> {
 		this.startIndex = startIndex;
 	}
 	public int getNextPageIndex() {
+		if(pageSize==0){
+			return 0;
+		}
 		int maxIndex=resultSize/pageSize;
 		if(resultSize % pageSize !=0){
 			maxIndex+=1;
@@ -54,11 +60,26 @@ public class PaginationResult<T> {
 	}
 	
 	public void serializeIndex(){
+		if(pageSize==0){
+			return;}
 		int sisa=startIndex%pageSize;
 		if(sisa!=0){
 			startIndex -=sisa;
 		}
 	}
+	/**
+	 * @return the pageNumber
+	 */
+	public int getPageNumber() {
+		if(pageSize==0)return 0;
+		int number=resultSize/pageSize;
+		if((resultSize % pageSize)!=0){
+			number++;
+		}
+		return number;
+	}
+
+
 	public static int serializeIndex(int index,int pageSize){
 		int sisa=index%pageSize;
 		if(sisa!=0){

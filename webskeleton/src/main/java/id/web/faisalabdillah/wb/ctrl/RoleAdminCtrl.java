@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/admin/role")
 public class RoleAdminCtrl {
-	
+	private final int PAGE_SIZE=10;
 	@Autowired
 	IRoleService roleService;
 
@@ -41,20 +41,22 @@ public class RoleAdminCtrl {
 			rolep=roleService.searchByExample(ex, firstResult, maxResult);
 			roles=rolep.getResult();
 		}
-		
+		model.addAttribute("testing","Tessting nih");
 		model.addAttribute("q",q);
+		model.addAttribute("roles", roles);
 		model.addAttribute("nextIndex",rolep.getNextPageIndex());
 		model.addAttribute("prevIndex",rolep.getPrevPageIndex());
-		model.addAttribute("resultSize",roles);
+		model.addAttribute("numberPage",rolep.getPageNumber());
+		model.addAttribute("resultSize",rolep.getResultSize());
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return "admin/role/add";
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
 	public String roleAddList(Model model,@RequestParam(required=false) String q){
-		return roleAddList(model,0,0,q);
+		return roleAddList(model,PAGE_SIZE,0,q);
 	}
 	@RequestMapping(value="/add*",method=RequestMethod.POST)
 	public String roleAdd(Model model,@ModelAttribute Role roleCommand){
@@ -66,6 +68,6 @@ public class RoleAdminCtrl {
 	}
 	@RequestMapping(value="/add/{maxResult}",method=RequestMethod.GET)
 	public String roleAddList(Model model,@PathVariable int maxResult,@RequestParam(required=false) String q){
-		return roleAddList(model,maxResult,0,q);
+		return roleAddList(model,maxResult,PAGE_SIZE,q);
 	}
 }
