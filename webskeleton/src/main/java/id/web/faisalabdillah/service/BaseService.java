@@ -11,7 +11,7 @@ public interface BaseService<T> {
 	public boolean update(T entity);
 	public T findById(Object id);
 	public List<T> findAll();
-	public List<T> findAll(int firstResult,int maxResult);
+	public PaginationResult<T> findAll(int firstResult,int maxResult);
 	public List<T> searchByExample(T entity);
 	public PaginationResult<T> searchByExample(T entity,int firstResult,int maxResult);
 }

@@ -3,8 +3,10 @@ package id.web.faisalabdillah.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="MST_ROLE")
 public class Role extends BaseDomain {
 	
 	/**

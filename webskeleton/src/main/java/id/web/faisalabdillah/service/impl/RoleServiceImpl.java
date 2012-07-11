@@ -13,7 +13,7 @@ import id.web.faisalabdillah.service.IRoleService;
 
 @Service
 @Transactional(readOnly=true)
-public class RoleService implements IRoleService {
+public class RoleServiceImpl implements IRoleService {
 
 	@Autowired
 	private RoleDaoImpl roleDao;
@@ -81,7 +81,7 @@ public class RoleService implements IRoleService {
 	}
 
 	@Override
-	public List<Role> findAll(int firstResult, int maxResult) {
+	public PaginationResult<Role> findAll(int firstResult, int maxResult) {
 		return roleDao.findAll(firstResult, maxResult);
 	}
 	

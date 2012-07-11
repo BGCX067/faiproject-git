@@ -62,16 +62,19 @@ public abstract class AbstractDao<T> {
 	}
 	
 	public List<T> findAll(){
-		return findAll(0, 0);
+		return findAll(0, 0).getResult();
 	}
 	
 	
 	@SuppressWarnings("unchecked")
-	public List<T> findAll(int firstResult,int maxResult){
-		Query q=sessionFactory.getCurrentSession().createQuery("select c from "+clazz.getName()+" c");
-		q.setFirstResult(firstResult);
-		if(maxResult!=0)q.setMaxResults(maxResult);
-		return q.list();
+	public PaginationResult<T> findAll(int firstResult,int maxResult){
+//		Query q=sessionFactory.getCurrentSession().createQuery("select c from "+clazz.getName()+" c");
+//		q.setFirstResult(firstResult);
+//		if(maxResult!=0)q.setMaxResults(maxResult);
+		Criteria crit=sessionFactory.getCurrentSession().createCriteria(clazz);
+		crit.setFirstResult(firstResult);
+		if(maxResult>0)crit.setMaxResults(maxResult);
+		return new PaginationResult<T>(crit.list(), getResultSize(crit), firstResult, maxResult);
 	}
 	
 	@SuppressWarnings("unchecked")

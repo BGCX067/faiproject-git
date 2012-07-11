@@ -169,7 +169,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public List<User> findAll(int firstResult, int maxResult) {
+	public PaginationResult<User> findAll(int firstResult, int maxResult) {
 		return userDao.findAll(firstResult,maxResult);
 	}
 
