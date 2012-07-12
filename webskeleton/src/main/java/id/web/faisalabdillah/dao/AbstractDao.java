@@ -9,6 +9,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Projections;
@@ -110,7 +111,7 @@ public abstract class AbstractDao<T> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected PaginationResult<T> searchByExample(Example example) {
+	protected PaginationResult<T> searchByExample(Criterion example) {
 		Criteria crit=sessionFactory.getCurrentSession().createCriteria(clazz);
 		crit.add(example);
 		return new PaginationResult<T>(crit.list(), getResultSize(crit), 0, 0);

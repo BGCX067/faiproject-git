@@ -23,22 +23,21 @@ public class RoleAdminCtrl {
 	@Autowired
 	IRoleService roleService;
 
-	@RequestMapping(value="/add/{maxResult}/{firstResult}",method=RequestMethod.GET)
-	public String roleAddList(Model model,@PathVariable int maxResult,@PathVariable int firstResult,@RequestParam(required=false) String q){
+	@RequestMapping(value="/add/{maxResult}/{pageNumber}",method=RequestMethod.GET)
+	public String roleAddList(Model model,@PathVariable int maxResult,@PathVariable int pageNumber,@RequestParam(required=false) String q){
 		Role role=new Role();
 		model.addAttribute("roleCommand", role);
 		PaginationResult<Role> rolep;
 		List<Role> roles;
 		try {
-			
 		if(q==null || q.equalsIgnoreCase("")){
-			rolep=roleService.findAll(firstResult, maxResult);
+			rolep=roleService.findAll(pageNumber, maxResult);
 			roles=rolep.getResult();
 		}else{
 			Role ex=new Role();
 			ex.setCode(q);
 			ex.setDescription(q);
-			rolep=roleService.searchByExample(ex, firstResult, maxResult);
+			rolep=roleService.searchByExample(ex, pageNumber, maxResult);
 			roles=rolep.getResult();
 		}
 		model.addAttribute("testing","Tessting nih");
@@ -51,7 +50,7 @@ public class RoleAdminCtrl {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "admin/role/add";
+		return "admin/role/add-role";
 	}
 	
 	@RequestMapping(value="/add",method=RequestMethod.GET)

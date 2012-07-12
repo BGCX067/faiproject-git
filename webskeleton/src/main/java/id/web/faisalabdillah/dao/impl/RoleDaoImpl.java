@@ -2,9 +2,12 @@ package id.web.faisalabdillah.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import id.web.faisalabdillah.common.PaginationResult;
 import id.web.faisalabdillah.dao.AbstractDao;
@@ -34,8 +37,10 @@ public class RoleDaoImpl extends AbstractDao<Role> implements IRoleDao{
 	public PaginationResult<Role> findRoleByExample(Role role, int firstIndex,
 			int maxResult) {
 		Example example=Example.create(role);
+		example.ignoreCase();
 		example.enableLike(MatchMode.ANYWHERE);
 		return searchByExample(example);
 	}
+	
 
 }

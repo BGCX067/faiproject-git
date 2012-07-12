@@ -1,7 +1,5 @@
 package id.web.faisalabdillah.common;
 
-import id.web.faisalabdillah.domain.User;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PaginationResult<T> {
@@ -9,7 +7,6 @@ public class PaginationResult<T> {
 	private int resultSize;
 	private int pageSize;
 	private int startIndex;
-	private int pageNumber;
 	
 	
 	public PaginationResult(List<T> result,int resultSize,int startIndex,int pageSize) {
@@ -49,16 +46,29 @@ public class PaginationResult<T> {
 		if(pageSize==0){
 			return 0;
 		}
-		int maxIndex=resultSize/pageSize;
+		int maxPage=resultSize/pageSize;
 		if(resultSize % pageSize !=0){
-			maxIndex+=1;
+			maxPage+=1;
 		}
+		int maxIndex=(maxPage*pageSize)-1;
 		return startIndex>=maxIndex?startIndex:startIndex+pageSize;
 	}
 	public int getPrevPageIndex() {
 		return startIndex<1?startIndex:startIndex-pageSize;
 	}
 	
+	public static void main(String[] args) {
+		PaginationResult<Object> pag=new PaginationResult<Object>(null, 522, 0, 10);
+		System.out.println(pag.getNextPageIndex());
+		System.out.println(pag.getStartIndex());
+		System.out.println(pag.getPageNumber());
+		System.out.println(pag.getPageNumber()*pag.getPageSize());
+		
+	}
+	
+	public int getCurrentPage(){
+		return 0;
+	}
 	public void serializeIndex(){
 		if(pageSize==0){
 			return;}
@@ -79,7 +89,10 @@ public class PaginationResult<T> {
 		return number;
 	}
 
-
+	public static int getIndexByPageNumber(int pageNumber,int pageSize){
+		if(pageNumber==0)return 0;
+		return (pageNumber-1)*pageSize;
+	}
 	public static int serializeIndex(int index,int pageSize){
 		int sisa=index%pageSize;
 		if(sisa!=0){
@@ -87,18 +100,4 @@ public class PaginationResult<T> {
 		}
 		return index;
 	}
-	
-	public static void main(String[] args) {
-		PaginationResult<User> userPaginated=new PaginationResult<User>(new ArrayList<User>(), 53, 7, 5);
-//		System.out.println(userPaginated.getClass().getName());
-//		System.out.println(userPaginated.getClass().getCanonicalName());
-//		System.out.println(userPaginated.getNextPageIndex());
-//		System.out.println(userPaginated.getPrevPageIndex());
-		userPaginated.serializeIndex();
-		System.out.println(userPaginated.getStartIndex());
-		int jump=5;
-		int startIndex=4;
-		System.out.println(startIndex % jump);
-	}
-
 }
