@@ -35,7 +35,7 @@
 	</form:form>
 	<table class="table table-striped">
 		<thead>
-			<tr><td colspan="4"><form method="get" class="well form-search"><input type="text" name="q" class="search-query"/><button type="submit" name="search" class="btn">Search</button> </form></td></tr>
+			<tr><th colspan="4"><form method="get" class="well form-search"><input type="text" name="q" class="search-query"/><button type="submit" name="search" class="btn">Search</button> </form></th></tr>
 			<tr><th>No</th><th>Code</th><th>Description</th></tr>
 		</thead>
 		<tbody>
