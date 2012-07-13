@@ -5,6 +5,8 @@
 	uri="http://www.opensymphony.com/sitemesh/decorator"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<c:url value="/logout" var="logoutURL" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,13 +49,15 @@ body {
 					
 						<i class="icon-wrench"></i> Muhamad Faisal Abdillah<span class="caret"></span> </a>
 					<ul class="dropdown-menu">
+					<sec:authorize access="fullyAuthenticated">
 						<li><a href="#"><i class="icon-user"></i>Profile</a>
 						</li>
 						<li><a href="#"><i class="icon-envelope"></i>Notification <span class="badge badge-important">10</span></a></li>
 						<li class="divider"></li>
-						<li><a href="#"><i class="icon-off"></i>Logout</a>
+						<li><a href="${logoutURL }"><i class="icon-off"></i>Logout</a>
 						</li>
-						<li onclick="return false;">
+					</sec:authorize>
+						<li>
 					<form action="<%=request.getContextPath() %>/j_spring_security_check" method="POST" class="well" >
 								<label>Email</label>
 								<input type="text" placeholder="Email" name="j_username"/>
