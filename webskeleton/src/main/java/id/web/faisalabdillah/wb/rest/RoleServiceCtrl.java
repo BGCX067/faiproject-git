@@ -2,9 +2,9 @@ package id.web.faisalabdillah.wb.rest;
 
 import java.util.List;
 
+import id.web.faisalabdillah.common.JsonResultBean;
 import id.web.faisalabdillah.common.PaginationResult;
 import id.web.faisalabdillah.domain.Role;
-import id.web.faisalabdillah.dto.JsonResultBean;
 import id.web.faisalabdillah.service.IRoleService;
 
 import org.springframework.beans.factory.annotation.Autowired;

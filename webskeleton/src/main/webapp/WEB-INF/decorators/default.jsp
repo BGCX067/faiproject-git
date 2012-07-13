@@ -54,11 +54,11 @@ body {
 						<li><a href="#"><i class="icon-off"></i>Logout</a>
 						</li>
 						<li onclick="return false;">
-					<form action="#" class="well" >
+					<form action="<%=request.getContextPath() %>/j_spring_security_check" method="POST" class="well" >
 								<label>Email</label>
-								<input type="text" placeholder="Email"/>
+								<input type="text" placeholder="Email" name="j_username"/>
 								<label>Password</label>
-								<input type="Password" placeholder="Password"/>
+								<input type="Password" placeholder="Password" name="j_password"/>
 								<button class="btn" type="submit"><i class="icon-briefcase"></i>Login</button>
 					</form>
 						</li>

@@ -11,7 +11,6 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.HibernateTemplate;
@@ -59,7 +58,7 @@ public abstract class AbstractDao<T> {
 	
 	@SuppressWarnings("unchecked")
 	public T load(Object id){
-		return (T) sessionFactory.getCurrentSession().load(clazz.getClass(), (Serializable) id);
+		return (T) sessionFactory.getCurrentSession().load(clazz, (Serializable) id);
 	}
 	
 	public List<T> findAll(){
@@ -72,10 +71,9 @@ public abstract class AbstractDao<T> {
 //		Query q=sessionFactory.getCurrentSession().createQuery("select c from "+clazz.getName()+" c");
 //		q.setFirstResult(firstResult);
 //		if(maxResult!=0)q.setMaxResults(maxResult);
-		Criteria crit=sessionFactory.getCurrentSession().createCriteria(clazz);
-		crit.setFirstResult(firstResult);
-		if(maxResult>0)crit.setMaxResults(maxResult);
-		return new PaginationResult<T>(crit.list(), getResultSize(crit), firstResult, maxResult);
+		DetachedCriteria crit=DetachedCriteria.forClass(clazz);
+		List<T> datas=hibernateTemplate.findByCriteria(crit,firstResult,maxResult);
+		return new PaginationResult<T>(datas, getResultSize(crit), firstResult, maxResult);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -111,11 +109,12 @@ public abstract class AbstractDao<T> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected PaginationResult<T> searchByExample(Criterion example) {
-		Criteria crit=sessionFactory.getCurrentSession().createCriteria(clazz);
-		crit.add(example);
-		return new PaginationResult<T>(crit.list(), getResultSize(crit), 0, 0);
-		
+	protected PaginationResult<T> searchByExample(Criterion example,int firstResult,int maxResult) {
+		DetachedCriteria criterion=DetachedCriteria.forClass(clazz);
+		criterion.add(example);
+		List<T> datas=getHibernateTemplate().findByCriteria(criterion,firstResult,maxResult);
+		int resultSize=getResultSize(criterion);
+		return new PaginationResult<T>(datas, resultSize, firstResult, maxResult);
 	}
 	
 	protected int getResultSize(String sql){
@@ -133,6 +132,6 @@ public abstract class AbstractDao<T> {
 	
 	protected int getResultSize(DetachedCriteria c){
 		c.setProjection(Projections.rowCount());
-		return (Integer) getHibernateTemplate().findByCriteria(c).get(0);
+		return ((Long) getHibernateTemplate().findByCriteria(c,0,0).get(0)).intValue();
 	}
 }

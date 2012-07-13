@@ -21,6 +21,11 @@
 			</div>
 	</div>
 	<div class="span9">
+	<c:if test="${not empty cf}">
+	<div class="alert ${cf.success?'alert-success':'alert-error' }">
+		${cf.message }
+	</div>
+	</c:if>
 	<form:form commandName="roleCommand" cssClass="well" method="post">
 		<h2>Role Form</h2>
 		<form:label path="code">Code</form:label>
@@ -33,14 +38,15 @@
 		<button type="reset" class="btn btn-primary">Reset</button>
 		</div>
 	</form:form>
+	<a name="table"></a>
 	<table class="table table-striped">
 		<thead>
 			<tr><th colspan="4"><form method="get" class="well form-search"><input type="text" name="q" class="search-query"/><button type="submit" name="search" class="btn">Search</button> </form></th></tr>
 			<tr><th>No</th><th>Code</th><th>Description</th></tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${roles}" var="role" varStatus="i">
-			<tr><td>${i.count}</td><td>${role.code }</td><td>${role.description}</td><td><div class="btn-group"><a class="btn" href="#">Delete</a><a class="btn" href="#">Edit</a></div></td></tr>
+			<c:forEach items="${roles.result}" var="role" varStatus="i">
+			<tr><td>${i.count}</td><td>${role.code }</td><td>${role.description}</td><td><div class="btn-group"><a class="btn" href="<%=request.getContextPath()+"/admin/role/del" %>/${role.code}">Delete</a><a class="btn" href="#">Edit</a></div></td></tr>
 			</c:forEach>
 			<c:if test="${resultSize == 0 }">
 			<tr><td colspan="4">0 Result</td></tr>
@@ -50,11 +56,28 @@
 			<tr><td colspan="4">
 				<div class="pagination">
 					<ul>
-						<li><a href="<%=request.getContextPath()+"/admin/role/add" %>/${0}/${prevIndex}">prev</a></li>
-						<c:forEach begin="1" end="${numberPage}" var="i">
-						<li><a href="<%=request.getContextPath()+"/admin/role/add" %>/${0}/${i}">${i}</a></li>
+						<li class="${roles.prevPage == roles.currentPage?'disabled':'' }" >
+						<c:choose>
+						<c:when test="${roles.prevPage!=roles.currentPage }">
+							<a href="<%=request.getContextPath()+"/admin/role/add" %>/${roles.pageSize}/${roles.prevPage}#table?q=${q}">prev</a>
+							</c:when>
+							<c:otherwise>
+								<a>prev</a>
+							</c:otherwise>
+						</c:choose>
+						</li>
+						<c:forEach begin="1" end="${roles.maxPage}" var="i">
+						<li class="${i == roles.currentPage?'active':'' }"><a href="<%=request.getContextPath()+"/admin/role/add" %>/${roles.pageSize}/${i}#table?q=${q}">${i}</a></li>
 						</c:forEach>
-						<li><a href="<%=request.getContextPath()+"/admin/role/add" %>/${0}/${nextIndex}">next</a></li>
+						<li class="${roles.nextPage == roles.currentPage?'disabled':'' }">
+						<c:choose>
+							<c:when test="${roles.nextPage!=roles.currentPage }">
+							<a href="<%=request.getContextPath()+"/admin/role/add" %>/${roles.pageSize}/${roles.nextPage}#table?q=${q}">next</a>
+							</c:when>
+							<c:otherwise>
+								<a>next</a>
+							</c:otherwise>
+						</c:choose></li>
 					</ul>
 				</div>
 			</td></tr>
@@ -62,6 +85,6 @@
 	</table>
 	</div>
 </div>
-
+${roles.size }
 </body>
 </html>

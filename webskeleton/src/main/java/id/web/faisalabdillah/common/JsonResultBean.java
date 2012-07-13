@@ -1,4 +1,4 @@
-package id.web.faisalabdillah.dto;
+package id.web.faisalabdillah.common;
 
 public class JsonResultBean<T> {
 	private int resultsize;

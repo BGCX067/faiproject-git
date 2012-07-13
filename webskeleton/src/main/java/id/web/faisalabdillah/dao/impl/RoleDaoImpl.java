@@ -39,7 +39,7 @@ public class RoleDaoImpl extends AbstractDao<Role> implements IRoleDao{
 		Example example=Example.create(role);
 		example.ignoreCase();
 		example.enableLike(MatchMode.ANYWHERE);
-		return searchByExample(example);
+		return searchByExample(example,firstIndex,maxResult);
 	}
 	
 

@@ -5,9 +5,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import id.web.faisalabdillah.common.JsonResultBean;
 import id.web.faisalabdillah.common.PaginationResult;
 import id.web.faisalabdillah.domain.User;
-import id.web.faisalabdillah.dto.JsonResultBean;
 import id.web.faisalabdillah.service.IUserService;
 import id.web.faisalabdillah.wb.model.UserModel;
 

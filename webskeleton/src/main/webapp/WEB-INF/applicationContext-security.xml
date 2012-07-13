@@ -6,4 +6,15 @@
         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
         http://www.springframework.org/schema/security
         http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+	<http auto-config="true">
+		<intercept-url pattern="/admin/**" access="ROLE_ADMIN"/>
+		<form-login login-page="/" authentication-failure-url="/" default-target-url="/admin/role/add"/>
+	</http>
+	<authentication-manager>
+		<authentication-provider>
+			<user-service>
+				<user name="faitz" password="testpassword" authorities="ROLE_ADMIN"/>
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>        
 </beans:beans>
