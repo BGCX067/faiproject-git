@@ -17,14 +17,15 @@ package id.web.faisalabdillah.service;
 
 import id.web.faisalabdillah.common.PaginationResult;
 
+import java.io.Serializable;
 import java.util.List;
 
 public interface BaseService<T> {
 	
 	public boolean insert(T entity);
-	public boolean delete(Object id);
+	public boolean delete(Serializable id);
 	public boolean update(T entity);
-	public T findById(Object id);
+	public T findById(Serializable id);
 	public List<T> findAll();
 	public PaginationResult<T> findAll(int firstResult,int maxResult);
 	public List<T> searchByExample(T entity);

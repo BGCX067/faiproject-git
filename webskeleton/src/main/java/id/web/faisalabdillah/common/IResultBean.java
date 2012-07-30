@@ -12,17 +12,36 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *	 
  */
+package id.web.faisalabdillah.common;
 
-package id.web.faisalabdillah.dao;
+/**
+ * id.web.faisalabdillah.common
+ * 
+ * @author Muhamad Faisal Abdillah <br/>
+ *         Jul 17, 2012
+ * 
+ */
+public interface IResultBean<T> {
+	int getCurrentPage();
 
-import id.web.faisalabdillah.common.PaginationResult;
-import id.web.faisalabdillah.domain.Role;
+	void setCurrentPage(int curr);
 
-import java.util.List;
+	int getSize();
 
-public interface IRoleDao {
+	void setSize(int size);
+
+	Object getMessage();
+
+	void setMessage(Object message);
+
+	boolean isSuccess();
 	
-	public List<Role> findRoleByExample(Role role);
-	public PaginationResult<Role> findRoleByExample(Role role,int firstIndex,int maxResult);
-
+	T getResult();
+	
+	void setResult(T t);
+	
+	int getPageSize();
+	
+	void setPageSize(int pageSize);
+	
 }

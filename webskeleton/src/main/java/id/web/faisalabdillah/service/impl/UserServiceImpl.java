@@ -15,6 +15,7 @@
 
 package id.web.faisalabdillah.service.impl;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -52,7 +53,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public boolean delete(Object id) {
+	public boolean delete(Serializable id) {
 		boolean success = false;
 		try {
 			userDao.delete(findById(id));
@@ -77,7 +78,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public User findById(Object id) {
+	public User findById(Serializable id) {
 		return findById(id, false);
 	}
 
@@ -90,7 +91,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public User findById(Object id, boolean eager) {
+	public User findById(Serializable id, boolean eager) {
 		User user = userDao.load(id);
 		if (eager) {
 			eagerFetch(user,true);

@@ -15,14 +15,11 @@
 
 package id.web.faisalabdillah.common;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class CommonResultBean<T>{
+public class CommonResultBean<T> implements IResultBean<T>{
 	private int size;
 	private int currentPage;
 	private int pageSize;
-	private List<T> result;
+	private T result;
 	private Object message;
 	private boolean success;
 	
@@ -70,13 +67,7 @@ public class CommonResultBean<T>{
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}
-	public List<T> getResult() {
-		if(result==null)result=new ArrayList<T>();
-		return result;
-	}
-	public void setResult(List<T> result) {
-		this.result = result;
-	}
+	
 	public Object getMessage() {
 		return message;
 	}
@@ -88,6 +79,20 @@ public class CommonResultBean<T>{
 	}
 	public void setSuccess(boolean success) {
 		this.success = success;
+	}
+	/* (non-Javadoc)
+	 * @see id.web.faisalabdillah.common.IResultBean#getResult()
+	 */
+	@Override
+	public T getResult() {
+		return result;
+	}
+	/* (non-Javadoc)
+	 * @see id.web.faisalabdillah.common.IResultBean#setResult(java.lang.Object)
+	 */
+	@Override
+	public void setResult(T t) {
+		this.result = t;
 	}
 	
 	

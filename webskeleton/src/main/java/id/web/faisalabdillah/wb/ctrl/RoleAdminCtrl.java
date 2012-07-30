@@ -15,7 +15,9 @@
 
 package id.web.faisalabdillah.wb.ctrl;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import id.web.faisalabdillah.common.CommandFormBean;
 import id.web.faisalabdillah.common.CommonResultBean;
@@ -48,7 +50,7 @@ public class RoleAdminCtrl {
 			role=new Role();
 		}
 		model.addAttribute("roleCommand", role);
-		CommonResultBean<Role> result = new CommonResultBean<Role>();
+		CommonResultBean<List<Role>> result = new CommonResultBean<List<Role>>();
 		PaginationResult<Role> rolep;
 		int pageIndex=CommonResultBean.getIndex(pageNumber, maxResult);
 		System.out.println(pageIndex);
@@ -100,7 +102,7 @@ public class RoleAdminCtrl {
 	}
 	
 	@RequestMapping(value="/del/{id}",method=RequestMethod.GET)
-	public String roleDelete(Model model,@PathVariable Object id){
+	public String roleDelete(Model model,@PathVariable String id){
 		CommandFormBean cfb=new CommandFormBean();
 		cfb.setSuccess(roleService.delete(id));
 		if(cfb.isSuccess()){
@@ -109,6 +111,6 @@ public class RoleAdminCtrl {
 			cfb.setMessage("delete opration failed");
 		}
 		model.addAttribute("cf", cfb);
-		return roleAddList(model, "");
+		return "redirect:/admin/role/add";
 	}
 }

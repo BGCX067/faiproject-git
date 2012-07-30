@@ -15,19 +15,26 @@
 
 package id.web.faisalabdillah.common;
 
-public class JsonResultBean<T> {
-	private int resultsize;
+public class JsonResultBean<T> implements IResultBean<T> {
+	private int size;
+	private int pageSize;
 	private boolean success=false;
+	private int currentPage;
 	private T result;
-	private String message;
-	private String errorcode;
+	private Object message;
+	private String code;
 	
-	
-	public int getResultsize() {
-		return resultsize;
+	public int getPageSize() {
+		return pageSize;
 	}
-	public void setResultsize(int resultsize) {
-		this.resultsize = resultsize;
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+	public int getSize() {
+		return size;
+	}
+	public void setSize(int size) {
+		this.size = size;
 	}
 	public boolean isSuccess() {
 		return success;
@@ -41,18 +48,23 @@ public class JsonResultBean<T> {
 	public void setResult(T result) {
 		this.result = result;
 	}
-	public String getMessage() {
+	public Object getMessage() {
 		return message;
 	}
-	public void setMessage(String message) {
+	public void setMessage(Object message) {
 		this.message = message;
 	}
-	public String getErrorcode() {
-		return errorcode;
+	public String getCode() {
+		return code;
 	}
-	public void setErrorcode(String errorcode) {
-		this.errorcode = errorcode;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
-	
+	public int getCurrentPage() {
+		return currentPage;
+	}
+	public void setCurrentPage(int currentPage) {
+		this.currentPage = currentPage;
+	}
 }

@@ -15,6 +15,7 @@
 
 package id.web.faisalabdillah.service;
 
+import java.io.Serializable;
 import java.util.List;
 
 import id.web.faisalabdillah.common.PaginationResult;
@@ -22,7 +23,7 @@ import id.web.faisalabdillah.domain.User;
 
 public interface IUserService extends BaseService<User>{
 
-	User findById(Object id,boolean eager);
+	User findById(Serializable id,boolean eager);
 	
 	List<User> findAll(boolean eager);
 	

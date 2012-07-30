@@ -68,12 +68,15 @@ public abstract class AbstractDao<T> {
 	}
 	
 	public void insert(T entity){
-		sessionFactory.getCurrentSession().saveOrUpdate(entity);
+		sessionFactory.getCurrentSession().save(entity);
 	}
 	
+	public void insertOrUpdate(T entity){
+		sessionFactory.getCurrentSession().saveOrUpdate(entity);
+	}
 	@SuppressWarnings("unchecked")
-	public T load(Object id){
-		return (T) sessionFactory.getCurrentSession().load(clazz, (Serializable) id);
+	public T load(Serializable id){
+		return (T) sessionFactory.getCurrentSession().get(clazz,  id);
 	}
 	
 	public List<T> findAll(){

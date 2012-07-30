@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import id.web.faisalabdillah.common.IResultBean;
 import id.web.faisalabdillah.common.JsonResultBean;
 import id.web.faisalabdillah.common.PaginationResult;
 import id.web.faisalabdillah.domain.User;
@@ -33,16 +34,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * 
+ * id.web.faisalabdillah.wb.rest
+ * @author
+ * Muhamad Faisal Abdillah
+ * <br/> Jul 17, 2012
+ *
+ */
 @Controller
-@RequestMapping("/service/user/")
+@RequestMapping("/service/user")
 public class UserServiceCtrl {
 
 	@Autowired
 	IUserService userService;
 	
-	@RequestMapping(value="insert",method=RequestMethod.POST)
-	public JsonResultBean<Object> insert(UserModel userModel){
+	/*
+	 * Insert new User
+	 */
+	@RequestMapping(value="/",method=RequestMethod.POST)
+	public @ResponseBody IResultBean<Object> insert(UserModel userModel){
 		JsonResultBean<Object> json=new JsonResultBean<Object>();
 		User user=userModel.toUser();
 		user.setCreatetm(new Date());
@@ -53,8 +66,11 @@ public class UserServiceCtrl {
 		return json;
 	}
 	
-	@RequestMapping(value="update",method=RequestMethod.POST)
-	public JsonResultBean<Object> update(UserModel userModel){
+	/*
+	 * Update User
+	 */
+	@RequestMapping(value="/",method=RequestMethod.PUT)
+	public @ResponseBody IResultBean<Object> update(UserModel userModel){
 		JsonResultBean<Object> json=new JsonResultBean<Object>();
 		User user=userModel.toUser();
 		if(userService.update(user)){
@@ -64,8 +80,11 @@ public class UserServiceCtrl {
 		return json;
 	}
 	
-	@RequestMapping(value="delete/{id}",method=RequestMethod.GET)
-	public JsonResultBean<Object> delete(@PathVariable("id") String id){
+	/*
+	 * Delete User
+	 */
+	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
+	public @ResponseBody IResultBean<Object> delete(@PathVariable("id") String id){
 		JsonResultBean<Object> json=new JsonResultBean<Object>();
 		if(userService.delete(id)){
 			json.setSuccess(true);
@@ -75,32 +94,37 @@ public class UserServiceCtrl {
 		return json;
 	}
 	
-	@RequestMapping(value="get/{id}")
-	public JsonResultBean<User> get(@PathVariable("id") String id){
+	/*
+	 * get User
+	 */
+	@RequestMapping(value="/{id}",method=RequestMethod.GET)
+	public @ResponseBody IResultBean<User> get(@PathVariable("id") String id){
 		JsonResultBean<User> json=new JsonResultBean<User>();
 		json.setResult(userService.findById(id, true));
 		return json;
 	}
 	
-	@RequestMapping(value="search",method=RequestMethod.GET)
-	public JsonResultBean<List<UserModel>> search(@RequestParam("q") String query){
-		return search(query, 0, 0);
-	}
-	
-	@RequestMapping(value="search/{maxResult}",method=RequestMethod.GET)
-	public JsonResultBean<List<UserModel>> search(@RequestParam("q") String query,@PathVariable int maxResult){
-		return search(query, 0, maxResult);
-	}
-	
-	@RequestMapping(value="search/{maxResult}/{firstResult}",method=RequestMethod.GET)
-	public JsonResultBean<List<UserModel>> search(@RequestParam("q") String query,@PathVariable int firstResult,@PathVariable int maxResult){
+	/**
+	 * Search User pagination
+	 * @param query
+	 * @param firstResult
+	 * @param maxResult
+	 * @return
+	 */
+	@RequestMapping(value="/",method=RequestMethod.GET)
+	public IResultBean<List<UserModel>> search(@RequestParam(value="q",required=false) String query,@RequestParam(value="first",required=false) int firstResult,@RequestParam(value="max",required=false) int maxResult){
 		JsonResultBean<List<UserModel>> json=new JsonResultBean<List<UserModel>>();
 		User user=new User();
 		user.setId(query);
 		user.setName(query);
 		user.setAddress(query);
-		PaginationResult<User> userp=userService.findByExample(user, firstResult, maxResult,true);
-		json.setResultsize(userp.getResultSize());
+		PaginationResult<User> userp;
+		if(query!=null && query.equalsIgnoreCase("")){
+			userp=userService.findByExample(user, firstResult, maxResult,true);
+		}else{
+			userp=userService.findAllPaged(true,firstResult, maxResult);
+		}
+		json.setSize(userp.getResultSize());
 		List<UserModel> userModels=new ArrayList<UserModel>();
 		List<User> users=userp.getResult();
 		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
@@ -113,10 +137,14 @@ public class UserServiceCtrl {
 		return json;
 	}
 	
-	@RequestMapping(value="search",method=RequestMethod.POST)
-	public JsonResultBean<Object> searchAdv(@ModelAttribute User user){
+	/**
+	 * Advanced Search With Form
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping(value="/",method=RequestMethod.GET)
+	public IResultBean<Object> searchAdv(@ModelAttribute User user){
 		JsonResultBean<Object> json=new JsonResultBean<Object>();
-		
 		return json;
 	}
 }

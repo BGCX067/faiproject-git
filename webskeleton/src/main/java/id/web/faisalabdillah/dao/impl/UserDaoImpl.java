@@ -26,11 +26,10 @@ import org.springframework.stereotype.Repository;
 
 import id.web.faisalabdillah.common.PaginationResult;
 import id.web.faisalabdillah.dao.AbstractDao;
-import id.web.faisalabdillah.dao.IUserDao;
 import id.web.faisalabdillah.domain.User;
 
 @Repository
-public class UserDaoImpl extends AbstractDao<User> implements IUserDao{
+public class UserDaoImpl extends AbstractDao<User>{
 
 	public UserDaoImpl(Class<User> clazz) {
 		super(clazz);
@@ -57,14 +56,12 @@ public class UserDaoImpl extends AbstractDao<User> implements IUserDao{
 		List<User> list=getHibernateTemplate().findByCriteria(c, firstIndex, maxResult);
 		return new PaginationResult<User>(list,1,firstIndex,maxResult);
 	}
-	@Override
 	public PaginationResult<User> findUserByName(String name, int firstResult,
 			int maxResult) {
 		Criteria crit=getSessionFactory().getCurrentSession().createCriteria(User.class);
 		crit.add(Restrictions.like("name", name, MatchMode.ANYWHERE));
 		return searchByCriteriaPagedResult(crit, firstResult, maxResult);
 	}
-	@Override
 	public PaginationResult<User> findAllPaged(int firstResult, int maxResult) {
 		return searchByCriteriaPagedResult(getSessionFactory().getCurrentSession().createCriteria(User.class), firstResult, maxResult);
 	}

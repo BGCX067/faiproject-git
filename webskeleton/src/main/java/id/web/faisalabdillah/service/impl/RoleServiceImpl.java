@@ -15,6 +15,7 @@
 
 package id.web.faisalabdillah.service.impl;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class RoleServiceImpl implements IRoleService {
 
 	@Override
 	@Transactional(readOnly=false)
-	public boolean delete(Object id) {
+	public boolean delete(Serializable id) {
 		boolean success=false;
 		try {
 			roleDao.delete(findById(id));
@@ -73,7 +74,7 @@ public class RoleServiceImpl implements IRoleService {
 	}
 
 	@Override
-	public Role findById(Object id) {
+	public Role findById(Serializable id) {
 		return roleDao.load(id);
 	}
 
